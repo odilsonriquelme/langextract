@@ -1,0 +1,60 @@
+REPOSITÓRIO: langextract  (LangExtract)
+TIPO: Fork Público (espelho do upstream, branch main)
+LINGUAGEM: Python
+URL (seu fork):    https://github.com/odilsonriquelme/langextract
+UPSTREAM (fork de): https://github.com/google/langextract (PROJETO OFICIAL DO GOOGLE)
+PUBLICAÇÃO: PyPI "langextract" + DOI no Zenodo (tem citação acadêmica)
+
+DESCRIÇÃO
+---------
+LangExtract é uma biblioteca Python que usa LLMs para EXTRAIR INFORMAÇÃO ESTRUTURADA de
+textos não estruturados, com base em instruções definidas pelo usuário. Processa materiais
+como notas clínicas e relatórios, identificando e organizando os dados — garantindo que cada
+dado extraído corresponda ao texto-fonte.
+
+POR QUE LANGEXTRACT (diferenciais)
+-----------------------------------
+1. SOURCE GROUNDING preciso — mapeia cada extração à sua localização exata no texto-fonte,
+   permitindo destacar visualmente e verificar a origem de cada dado.
+2. OUTPUTS ESTRUTURADOS confiáveis — força um schema consistente a partir de exemplos
+   few-shot, usando controlled generation em modelos suportados (ex.: Gemini).
+
+MODELOS / PROVIDERS SUPORTADOS (langextract/providers/)
+--------------------------------------------------------
+gemini.py + gemini_batch.py → Google Gemini (inclui modo batch)
+openai.py                    → modelos OpenAI
+ollama.py                    → modelos LOCAIS via Ollama
+router.py / builtin_registry.py / patterns.py → roteamento e registro de providers
+schemas/                     → schemas dos providers
+(+ Community Providers — ver COMMUNITY_PROVIDERS.md)
+
+ESTRUTURA DO PACOTE (langextract/)
+-----------------------------------
+extraction.py     → API principal de extração
+annotation.py     → anotação dos trechos-fonte (source grounding)
+chunking.py       → divisão de textos longos em chunks
+prompting.py / prompt_validation.py → geração e validação de prompts
+inference.py      → chamada aos modelos
+resolver.py       → resolução/alinhamento das entidades extraídas
+data.py / data_lib.py → estruturas de dados
+factory.py / registry.py / plugins.py → fábrica, registro e plugins de providers
+io.py             → entrada/saída (PDF, texto, etc.)
+progress.py       → acompanhamento de progresso
+core/             → núcleo; _compat/ → compatibilidade
+exceptions.py     → exceções
+
+OUTROS DIRETÓRIOS
+-----------------
+tests/        → suíte de testes ampla (chunking, annotation, schema, prompting, inference,
+                resolver, fuzzy_alignment, etc.)
+examples/     → exemplos (ex.: extração de Romeo e Julieta, medicação, RadExtract radiologia)
+benchmarks/   → benchmarks
+docs/         → documentação
+skills/langextract-usage → skill de uso (presente neste fork)
+autoformat.sh → formatação de código
+
+OBSERVAÇÃO (fork)
+-----------------
+Fork espelho do projeto oficial do Google. README/código são de terceiros — não editar.
+Push deste repo vai só para o SEU fork. Para atualizar, sincronizar com o upstream
+(git pull upstream main).
