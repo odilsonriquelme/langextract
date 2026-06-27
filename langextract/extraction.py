@@ -19,7 +19,6 @@ from __future__ import annotations
 from collections.abc import Iterable
 import dataclasses
 import typing
-from typing import cast
 import warnings
 
 from langextract import annotation
@@ -35,10 +34,10 @@ from langextract.core import tokenizer as tokenizer_lib
 
 
 def extract(
-    text_or_documents: typing.Any,
+    text_or_documents: str | Iterable[data.Document],
     prompt_description: str | None = None,
     examples: typing.Sequence[typing.Any] | None = None,
-    model_id: str = "gemini-2.5-flash",
+    model_id: str = "gemini-3.5-flash",
     api_key: str | None = None,
     language_model_type: typing.Type[typing.Any] | None = None,
     format_type: typing.Any = None,
@@ -87,7 +86,7 @@ def extract(
         multiple times. Note that max_workers improves processing speed without
         additional token costs. Refer to your API provider's pricing details and
         monitor usage with small test runs to estimate costs.
-      model_id: The model ID to use for extraction (e.g., 'gemini-2.5-flash').
+      model_id: The model ID to use for extraction (e.g., 'gemini-3.5-flash').
         If your model ID is not recognized or you need to use a custom provider,
         use the 'config' parameter with factory.ModelConfig to specify the
         provider explicitly.
@@ -362,7 +361,15 @@ def extract(
     )
     return result
   else:
-    documents = cast(Iterable[data.Document], text_or_documents)
+    if additional_context is not None:
+      documents = (
+          doc.with_additional_context(additional_context)
+          if doc.additional_context is None
+          else doc
+          for doc in text_or_documents
+      )
+    else:
+      documents = text_or_documents
     result = annotator.annotate_documents(
         documents=documents,
         resolver=res,
